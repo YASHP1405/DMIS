@@ -1,0 +1,97 @@
+
+{% extends "base.html" %}
+{% block content %}
+<section style="max-width:1200px;margin:50px auto;padding:30px;background:#f9f9ff;
+                border:2px solid darkviolet;border-radius:16px;box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+    <h2 style="color:darkviolet;text-align:center;margin-bottom:30px;">Manage Teachers</h2>
+
+    <div style="display:flex;gap:30px;align-items:flex-start;">
+
+        <!-- Collapsible Add Teacher Form -->
+        <div style="flex:1;">
+            <button onclick="toggleForm()" 
+                style="padding:12px 20px;background:darkviolet;color:white;border:none;
+                       border-radius:8px;width:100%;cursor:pointer;font-size:16px;font-weight:bold;">
+                ➕ Add New Teacher
+            </button>
+
+            <div id="addTeacherForm" style="display:none;margin-top:20px;">
+                <form method="POST" action="{{ url_for('add_teacher') }}" 
+                      style="padding:20px;background:white;border:1px solid #ccc;border-radius:10px;
+                             box-shadow:0 3px 8px rgba(0,0,0,0.1);">
+                    <h4 style="margin-bottom:15px;color:darkviolet;">Add Teacher</h4>
+
+                    <div style="margin:10px 0;">
+                        <input type="text" name="short_code" placeholder="Teacher ID" required 
+                               style="padding:10px;width:100%;border:1px solid #ccc;border-radius:8px;">
+                    </div>
+                    <div style="margin:10px 0;">
+                        <input type="text" name="name" placeholder="Teacher Name" required 
+                               style="padding:10px;width:100%;border:1px solid #ccc;border-radius:8px;">
+                    </div>
+                    <div style="margin:10px 0;">
+                        <input type="password" name="password" placeholder="Password" required 
+                               style="padding:10px;width:100%;border:1px solid #ccc;border-radius:8px;">
+                    </div>
+                    <button type="submit" 
+                            style="padding:10px 20px;background:darkviolet;color:white;border:none;
+                                   border-radius:8px;width:100%;cursor:pointer;">
+                        Add Teacher
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Teacher List -->
+        <div style="flex:2;">
+            <h4 style="margin-bottom:15px;color:darkviolet;">Existing Teachers</h4>
+
+            {% if teachers %}
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;">
+                    {% for code, teacher in teachers.items() %}
+                        <div style="padding:20px;background:white;border:1px solid #ddd;border-radius:12px;
+                                    box-shadow:0 4px 12px rgba(0,0,0,0.08);transition:transform 0.2s, box-shadow 0.2s;">
+                            <h5 style="margin:0;color:#333;">{{ teacher.name }}</h5>
+                            <p style="margin:5px 0 10px;color:#666;font-size:14px;">ID: {{ code }}</p>
+
+                            <!-- Status Badge -->
+                            {% if teacher.status == 'AVAILABLE' %}
+                                <span style="display:inline-block;padding:5px 10px;background:#28a745;color:white;
+                                             border-radius:20px;font-size:13px;">Available</span>
+                            {% elif teacher.status == 'NOT AVAILABLE' %}
+                                <span style="display:inline-block;padding:5px 10px;background:#dc3545;color:white;
+                                             border-radius:20px;font-size:13px;">Not Available</span>
+                            {% elif teacher.status == 'ON LEAVE' %}
+                                <span style="display:inline-block;padding:5px 10px;background:#ffc107;color:black;
+                                             border-radius:20px;font-size:13px;">On Leave</span>
+                            {% else %}
+                                <span style="display:inline-block;padding:5px 10px;background:#6c757d;color:white;
+                                             border-radius:20px;font-size:13px;">Unknown</span>
+                            {% endif %}
+
+                            <p style="margin-top:10px;font-size:13px;color:#888;">
+                                Last Updated: {{ teacher.last_updated }}
+                            </p>
+
+                            <a href="{{ url_for('remove_teacher', code=code) }}" 
+                               style="display:inline-block;margin-top:10px;color:red;font-weight:bold;
+                                      text-decoration:none;font-size:14px;">
+                                ❌ Remove
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No teachers found.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<script>
+function toggleForm() {
+    const form = document.getElementById("addTeacherForm");
+    form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+}
+</script>
+{% endblock %}
