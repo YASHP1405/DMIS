@@ -1,0 +1,33 @@
+
+{% extends "base.html" %}
+{% block content %}
+<section style="max-width:700px;margin:50px auto;padding:40px;text-align:center;background:#f9f9ff;border:2px solid darkviolet;border-radius:16px;">
+  <h2>Welcome to Our Official Website</h2>
+  <p>Please select an option to continue.</p>
+
+  <!-- Centered buttons -->
+  <div style="display:flex;flex-direction:column;align-items:center;gap:15px;margin-top:20px;">
+    <a class="start-button" href="{{ url_for('login_options') }}">Login</a>
+    <a class="start-button" href="{{ url_for('student_view') }}">Student</a>
+  </div>
+</section>
+
+<style>
+  .start-button {
+    display: block;
+    padding: 12px 20px;
+    background: darkviolet;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    width: 220px;
+    text-align: center;
+    transition: 0.3s;
+  }
+  .start-button:hover {
+    background: indigo;
+    transform: scale(1.05);
+  }
+</style>
+{% endblock %}
