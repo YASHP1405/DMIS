@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  body {
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    font-family: 'Poppins', sans-serif;
+    padding: 20px;
+    margin: 0;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-block;
+  }
+
+  .dropbtn {
+    background-color: #4B0082;
+    color: white;
+    padding: 10px 14px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    background-color: #4B0082;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    border-radius: 6px;
+    z-index: 1;
+  }
+
+  .dropdown-content a {
+    color: white;
+    padding: 10px 14px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #6A0DAD;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  .dropdown:hover .dropbtn {
+    background-color: #6A0DAD;
+  }
+
+  .glow-wrapper {
+    max-width: 1100px;
+    margin: 100px auto 40px;
+    padding: 30px;
+    border-radius: 20px;
+    background: #fff;
+    border: 3px solid rgba(106, 17, 203, 0.8);
+    box-shadow: 0 0 10px rgba(106, 17, 203, 0.3);
+    animation: mediumGlow 3s infinite alternate;
+  }
+
+  @keyframes mediumGlow {
+    0% {
+      box-shadow: 0 0 10px rgba(106, 17, 203, 0.4),
+                  0 0 20px rgba(106, 17, 203, 0.3),
+                  0 0 30px rgba(106, 17, 203, 0.2);
+    }
+    100% {
+      box-shadow: 0 0 20px rgba(106, 17, 203, 0.7),
+                  0 0 40px rgba(106, 17, 203, 0.5),
+                  0 0 60px rgba(106, 17, 203, 0.4);
+    }
+  }
+
+  .dashboard-container {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .card-status, .card-form {
+    flex: 1 1 320px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 30px 25px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-status::before, .card-form::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -75%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(120deg, rgba(106, 17, 203, 0.4), rgba(106, 17, 203, 0.1), rgba(106, 17, 203, 0.4));
+    transform: rotate(25deg);
+    transition: transform 0.6s ease;
+  }
+
+  .card-status:hover::before, .card-form:hover::before {
+    transform: translateX(300%) rotate(25deg);
+  }
+
+  .card-status:hover, .card-form:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(106, 17, 203, 0.6);
+  }
+
+  .card-status h2, .card-form h3 {
+    color: #6a0dad;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+
+  .card-status p {
+    font-size: 16px;
+    margin: 10px 0;
+  }
+
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .schedule-table th, .schedule-table td {
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    text-align: center;
+  }
+
+  .schedule-table th {
+    background-color: #6a0dad;
+    color: white;
+  }
+
+  .current-lecture {
+    background-color: #ffe599;
+    font-weight: bold;
+  }
+
+  .no-lecture {
+    font-style: italic;
+    color: #555;
+    margin-top: 15px;
+  }
+
+  .card-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .card-form select, .card-form input {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 75%;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .card-form select:focus, .card-form input:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 8px rgba(106, 17, 203, 0.5);
+    outline: none;
+  }
+
+  .card-form button, .manage-btn {
+    padding: 12px 30px;
+    background: #6a11cb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card-form button:hover, .manage-btn:hover {
+    background: #7f1fcc;
+    box-shadow: 0 5px 15px rgba(106, 17, 203, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-container {
+      flex-direction: column;
+      gap: 25px;
+      margin: 20px;
+    }
+    .card-form select, .card-form input {
+      width: 90%;
+    }
+  }
+</style>
+
+<div class="dropdown">
+  <button class="dropbtn">☰ Menu</button>
+  <div class="dropdown-content">
+    <a href="{{ url_for('teacher_dashboard') }}">Home</a>
+    <a href="{{ url_for('teacher_schedule') }}">Manage Schedule</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </div>
+</div>
+
+<div class="glow-wrapper">
+  <div class="dashboard-container">
+
+    <!-- Status Card -->
+    <div class="card-status">
+      <h2>Welcome, {{ teacher.name }}</h2>
+      <p><strong>Status:</strong>
+        {% if 'AVAILABLE' in display_status %} ✅ {{ display_status }}
+        {% elif 'NOT AVAILABLE' in display_status %} ❌ {{ display_status }}
+        {% elif 'ON LEAVE' in display_status %} 🛌 {{ display_status }}
+        {% else %} ℹ {{ display_status }}
+        {% endif %}
+      </p>
+      <p>🕒 Last Updated: {{ teacher.last_updated }}</p>
+
+      <h3 style="color:#6a0dad;">Today's Schedule ({{ current_day }})</h3>
+      {% if schedule %}
+        <table class="schedule-table">
+          <tr>
+            <th>Time Slot</th>
+            <th>Classroom</th>
+            <th>Subject</th>
+          </tr>
+          {% for time_slot, lecture in schedule.items() %}
+            {% set room = lecture['room'] if lecture and 'room' in lecture else '' %}
+            {% set subject = lecture['subject'] if lecture and 'subject' in lecture else '' %}
+            <tr class="{% if current_lecture and current_lecture['time_slot'] == time_slot %}current-lecture{% endif %}">
+              <td>{{ time_slot }}</td>
+              <td>{{ room }}</td>
+              <td>{{ subject }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% else %}
+        <p class="no-lecture">No lectures scheduled today.</p>
+      {% endif %}
+
+      <a href="{{ url_for('teacher_schedule') }}">
+        <button class="manage-btn">📅 Manage Schedule</button>
+      </a>
+    </div>
+
+    <!-- Status Update Form -->
+    <div class="card-form">
+      <h3>Update Status</h3>
+      <form method="POST">
+        <select name="status_type">
+          <option value="">--Select Status--</option>
+          <option value="AVAILABLE">AVAILABLE</option>
+          <option value="NOT AVAILABLE">NOT AVAILABLE</option>
+          <option value="ON LEAVE">ON LEAVE</option>
+        </select>
+        <input type="text" name="room" placeholder="Classroom (if available)">
+        <input type="text" name="leave_date" placeholder="Leave Date (DD/MM/YYYY)">
+        <button type="submit">Update Status</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+/* Dropdown Menu */
+.dropdown {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: inline-block;
+}
+.dropbtn {
+  background-color: #4B0082;
+  color: white;
+  padding: 10px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: 0;
+  background-color: #4B0082;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  z-index: 1;
+}
+.dropdown-content a {
+  color: white;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+}
+.dropdown-content a:hover {
+  background-color: #6A0DAD;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+.dropdown:hover .dropbtn {
+  background-color: #6A0DAD;
+}
+
+/* Teacher Card */
+.teacher-card {
+  max-width: 700px;
+  margin: 40px auto;
+  border: 2px solid #6a0dad;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+.teacher-card h2 {
+  color: #6a0dad;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.teacher-card p {
+  font-size: 16px;
+  margin: 6px 0;
+}
+.status-available { color: green; font-weight: bold; }
+.status-not { color: red; font-weight: bold; }
+.status-leave { color: orange; font-weight: bold; }
+</style>
+
+<!-- Dropdown menu -->
+<div class="dropdown">
+  <button class="dropbtn">☰ Menu</button>
+  <div class="dropdown-content">
+    <a href="{{ url_for('login') }}">Home</a>
+    <a href="#">Help</a>
+  </div>
+</div>
+
+{% for code, teacher in teachers.items() %}
+<div class="teacher-card">
+  <h2>{{ teacher.name }}</h2>
+  
+  <p>
+    <strong>Status:</strong>
+    {% if teacher.current_lecture %}
+      <span class="status-available">
+        📚 IN LECTURE → Room {{ teacher.current_lecture.room }}
+      </span>
+    {% elif 'ON LEAVE' in teacher.status %}
+      <span class="status-leave">🛌 {{ teacher.status }}</span>
+    {% else %}
+      <span class="status-not">❌ Not in class</span>
+    {% endif %}
+  </p>
+
+  <p>🕒 Last Updated: {{ teacher.last_updated }}</p>
+</div>
+{% endfor %}
+
+{% endblock %}

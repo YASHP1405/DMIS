@@ -1,0 +1,126 @@
+
+
+{% extends "base.html" %}
+{% block content %}
+<style>
+/* ===== Dropdown Menu (Enhanced) ===== */
+.dropdown {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+.dropbtn {
+  background: linear-gradient(135deg, #4B0082, #8A2BE2);
+  color: #fff;
+  padding: 10px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.dropbtn:hover {
+  background: #6A0DAD;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: 0;
+  background: #2E0854;
+  min-width: 180px;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+}
+.dropdown-content a:hover {
+  background: #6A0DAD;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* ===== Page Container ===== */
+.container {
+  max-width: 1100px;
+  margin: 70px auto;
+  padding: 30px;
+  background: #f9f9ff;
+  border: 2px solid darkviolet;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+.container h2 {
+  text-align: center;
+  color: #4B0082;
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+/* ===== Teacher Grid ===== */
+.teacher-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* ===== Teacher Card ===== */
+.teacher-card {
+  background: #fff;
+  border: 2px solid #eee;
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+.teacher-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(106,13,173,0.3);
+}
+.teacher-card strong {
+  font-size: 18px;
+  color: #333;
+  display: block;
+  margin-bottom: 8px;
+}
+.teacher-card small {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+</style>
+
+<!-- Dropdown -->
+<div class="dropdown">
+  <button class="dropbtn">☰ Menu</button>
+  <div class="dropdown-content">
+    <a href="https://yash4524.pythonanywhere.com/admin">Home</a>
+    <a href="#">Help</a>
+    <a href="https://yash4524.pythonanywhere.com/">Logout</a>
+  </div>
+</div>
+
+<!-- Teacher Status Section -->
+<div class="container">
+  <h2>Teachers Status</h2>
+
+  <div class="teacher-grid">
+    {% for code, teacher in teachers.items() %}
+      <div class="teacher-card">
+        <strong>{{ teacher.name }}</strong>
+        <span>{{ teacher.status }}</span>
+        <small>Last Updated: {{ teacher.last_updated }}</small>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
