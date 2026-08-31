@@ -4,19 +4,23 @@ from datetime import datetime
 import pyrebase
 import re
 import logging
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # basic logging
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "supersecretkey")
 
 # ===== Firebase Configuration =====
 config = {
-    "apiKey": "AIzaSyAzCdKIW2uEwMzsMFkK5Pu8MbcjPGAwF-w",
-    "authDomain": "teacherstatustracker.firebaseapp.com",
-    "databaseURL": "https://teacherstatustracker-default-rtdb.firebaseio.com",
-    "storageBucket": "teacherstatustracker.appspot.com"
+    "apiKey": os.environ.get("FIREBASE_API_KEY"),
+    "authDomain": os.environ.get("FIREBASE_AUTH_DOMAIN"),
+    "databaseURL": os.environ.get("FIREBASE_DATABASE_URL"),
+    "storageBucket": os.environ.get("FIREBASE_STORAGE_BUCKET")
 }
 
 firebase = pyrebase.initialize_app(config)
