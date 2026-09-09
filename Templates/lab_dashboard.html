@@ -176,15 +176,44 @@ document.addEventListener('DOMContentLoaded', function() {
   background:#cc0000;
 }
 /* Mobile Responsive Design */
+
 @media (max-width: 768px) {
+
     section {
+        width: 100% !important;
         max-width: 100% !important;
-        margin: 20px 10px !important;
+        margin: 20px 0 !important;
+        padding: 15px !important;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    section > div {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+        padding: 15px !important;
+    }
+
+    section form > div {
+        grid-template-columns: 1fr !important;
+    }
+
+    input,
+    textarea,
+    select,
+    button {
+        width: 100%;
+        max-width: 100%;
         box-sizing: border-box;
     }
 
     .report-card {
         width: 100%;
+        max-width: 100%;
         box-sizing: border-box;
         overflow-x: auto;
     }
@@ -194,11 +223,10 @@ document.addEventListener('DOMContentLoaded', function() {
         min-width: 500px;
     }
 
-    input,
-    select,
-    button {
-        max-width: 100%;
-        box-sizing: border-box;
+    .remove-btn {
+        position: static !important;
+        width: 100%;
+        margin-top: 10px;
     }
 
     body {
