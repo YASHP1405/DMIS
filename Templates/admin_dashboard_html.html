@@ -133,6 +133,41 @@
         transition:background 0.2s;
     }
     .report-item:hover { background:#f1e6ff; }
+    /* Mobile Responsive Design */
+@media (max-width: 768px) {
+    .lab-content {
+        padding: 10px;
+    }
+
+    .lab-header {
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .report-item {
+        padding: 10px;
+        font-size: 14px;
+        word-wrap: break-word;
+    }
+
+    table {
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    input,
+    select,
+    button {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+}
 </style>
 
 <!-- Script for Toggle -->
