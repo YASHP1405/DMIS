@@ -198,14 +198,36 @@
 
   @media (max-width: 768px) {
     .dashboard-container {
-      flex-direction: column;
-      gap: 25px;
-      margin: 20px;
+        flex-direction: column;
+        gap: 20px;
+        margin: 10px;
+        width: auto;
     }
-    .card-form select, .card-form input {
-      width: 90%;
+
+    .card-form {
+        width: 100%;
+        box-sizing: border-box;
     }
-  }
+
+    .card-form select,
+    .card-form input,
+    .card-form button {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    table {
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+}
 </style>
 
 <div class="dropdown">

@@ -175,5 +175,35 @@ document.addEventListener('DOMContentLoaded', function() {
 .remove-btn:hover {
   background:#cc0000;
 }
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    section {
+        max-width: 100% !important;
+        margin: 20px 10px !important;
+        box-sizing: border-box;
+    }
+
+    .report-card {
+        width: 100%;
+        box-sizing: border-box;
+        overflow-x: auto;
+    }
+
+    .report-table {
+        width: 100%;
+        min-width: 500px;
+    }
+
+    input,
+    select,
+    button {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+}
 </style>
 {% endblock %}
