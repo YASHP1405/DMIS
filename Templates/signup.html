@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - CSE Department Portal | GHRIETN</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body class="auth-page">
+  <div class="auth-container">
+    <div class="auth-info">
+      <h1>Join the CSE Department Portal</h1>
+      <p>Create your student account to check live teacher availability, view schedules, and stay up to date with department notices.</p>
+      <ul>
+        <li><i class="fas fa-chalkboard-user"></i> See which teachers are free right now</li>
+        <li><i class="fas fa-calendar-alt"></i> View department schedules</li>
+        <li><i class="fas fa-bullhorn"></i> Get the latest department notices</li>
+      </ul>
+    </div>
+
+    <div class="auth-form">
+      <div class="auth-brand">
+        <div class="badge"><i class="fas fa-user-plus"></i></div>
+        <h2>Create Student Account</h2>
+        <p>It only takes a minute</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'success' if category=='success' else 'error' }}">
+              <i class="fas {{ 'fa-check-circle' if category=='success' else 'fa-exclamation-circle' }}"></i>
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" action="{{ url_for('signup') }}" novalidate>
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <div class="input-with-icon">
+            <i class="fas fa-id-card leading-icon"></i>
+            <input type="text" id="name" name="name" placeholder="Enter your full name"
+                   value="{{ request.form.get('name', '') }}" autocomplete="name" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="user_id">Roll Number / Student ID</label>
+          <div class="input-with-icon">
+            <i class="fas fa-user leading-icon"></i>
+            <input type="text" id="user_id" name="user_id" placeholder="e.g. CSE2024001"
+                   value="{{ request.form.get('user_id', '') }}" autocomplete="username" required>
+          </div>
+          <p class="field-hint">This will be your login ID — choose one you'll remember.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-with-icon">
+            <i class="fas fa-lock leading-icon"></i>
+            <input type="password" id="password" name="password" placeholder="Create a password"
+                   autocomplete="new-password" required>
+            <button type="button" class="toggle-visibility" data-target="password" aria-label="Show password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <p class="field-hint">At least one letter, one number, and one symbol.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password</label>
+          <div class="input-with-icon">
+            <i class="fas fa-lock leading-icon"></i>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter your password"
+                   autocomplete="new-password" required>
+            <button type="button" class="toggle-visibility" data-target="confirm_password" aria-label="Show password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-auth">Create Account</button>
+      </form>
+
+      <div class="auth-switch">
+        Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.toggle-visibility').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var input = document.getElementById(btn.dataset.target);
+        if (!input) return;
+        var showing = input.type === 'text';
+        input.type = showing ? 'password' : 'text';
+        btn.querySelector('i').classList.toggle('fa-eye', showing);
+        btn.querySelector('i').classList.toggle('fa-eye-slash', !showing);
+        btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+      });
+    });
+  </script>
+</body>
+</html>

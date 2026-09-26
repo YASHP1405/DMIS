@@ -12,7 +12,7 @@ load_dotenv()
 # basic logging
 logging.basicConfig(level=logging.INFO)
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="Templates")
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "supersecretkey")
 
 # ===== Firebase Configuration =====
@@ -183,6 +183,61 @@ def login():
 
         flash("❌ Invalid credentials!", "danger")
     return render_template("login.html")
+
+# ===== Student Signup =====
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        # Same convention as teacher short codes (add_teacher uppercases
+        # them too) — keeps IDs case-insensitive and avoids "cse001" vs
+        # "CSE001" ending up as two different accounts by accident.
+        user_id = request.form.get("user_id", "").strip().upper()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if not name or not user_id or not password or not confirm_password:
+            flash("❌ All fields are required!", "danger")
+            return redirect(url_for("signup"))
+
+        if password != confirm_password:
+            flash("❌ Passwords do not match!", "danger")
+            return redirect(url_for("signup"))
+
+        if not validate_password(password):
+            flash("❌ Weak password! Must include letters, numbers, and symbols.", "danger")
+            return redirect(url_for("signup"))
+
+        try:
+            # user_id must be unique across every role, not just students.
+            # login() checks admins -> teachers -> labs -> students in that
+            # exact order, so a colliding ID would let a new student
+            # account silently shadow (or be shadowed by) an existing
+            # account of a different role.
+            existing = (
+                db.child("admins").child(user_id).get().val()
+                or db.child("teachers").child(user_id).get().val()
+                or db.child("labs").child(user_id).get().val()
+                or db.child("students").child(user_id).get().val()
+            )
+            if existing:
+                flash("❌ That Student ID is already taken. Please choose another.", "danger")
+                return redirect(url_for("signup"))
+
+            db.child("students").child(user_id).set({
+                "name": name,
+                "password": hash_password(password),
+                "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            })
+        except Exception as e:
+            logging.exception("Error creating student account: %s", e)
+            flash("❌ Something went wrong creating your account. Please try again.", "danger")
+            return redirect(url_for("signup"))
+
+        flash("✅ Account created! You can now log in.", "success")
+        return redirect(url_for("login"))
+
+    return render_template("signup.html")
 
 # ===== Admin Dashboard =====
 @app.route("/admin")
